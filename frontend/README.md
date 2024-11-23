@@ -1,13 +1,13 @@
-Personify Frontend
+# Personify Frontend
 What does your music taste say about you?
-🚀 Tech Stack
+# 🚀 Tech Stack
 Frontend Framework: React.js
 Development Environment: Vite.js
 Styling: CSS and HTML
 🎨 Design
 View the Figma design here [<!-- Replace with your actual link -->](https://www.figma.com/design/9feMKpmoBI9apgjL7XQRYq/CodeJam-14---Personify?node-id=0-1&t=V0ZH7FWK1gHm2HNJ-1)
 
-📦 Getting Started
+# 📦 Getting Started
 Clone the repository:
 
 bash
@@ -30,6 +30,6 @@ Copy code
 npm run dev
 Open your browser at http://localhost:5173/.
 
-✨ Contributors
+# ✨ Contributors
 Gracie
 Ariane
