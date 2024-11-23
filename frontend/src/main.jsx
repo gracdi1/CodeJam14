@@ -1,13 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css'; // Optional: for styles
+import App from './App';
+import './styles/index.css';
 
-function App() {
-  return (
-    <div>
-      <h1>Hello, React with Vite!</h1>
-    </div>
-  );
-}
-
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
