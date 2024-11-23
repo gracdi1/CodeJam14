@@ -1,4 +1,5 @@
 import os
+import json
 from flask import Flask, redirect, request, jsonify, session
 from spotipy.oauth2 import SpotifyOAuth
 import spotipy
@@ -8,7 +9,7 @@ app = Flask(__name__)
 # Your Spotify API credentials
 CLIENT_ID = '78ff7eb57b0845d58d5a4df439c2f569'
 CLIENT_SECRET = 'e499ca7b56d2404eadb3f2942d61dfeb'
-REDIRECT_URI = 'http://localhost:3000'
+REDIRECT_URI = 'http://localhost:3000/callback'
 
 # Initialize SpotifyOAuth
 sp_oauth = SpotifyOAuth(client_id=CLIENT_ID,
@@ -32,6 +33,7 @@ def login():
 def callback():
     token_info = sp_oauth.get_access_token(request.args['code'])
     session['token_info'] = token_info  # Store the token for later use
+    print("Token Info:", session.get('token_info')) 
     return redirect('/top-items')  # Redirect to fetch top items
 
 # Fetch user top artists or tracks
@@ -41,14 +43,32 @@ def top_items():
     if not token_info:
         return redirect('/login')
 
-    # Get user top artists or tracks
-    print("i got here yay")
     sp = spotipy.Spotify(auth=token_info['access_token'])
-    results = sp.current_user_top_tracks(limit=5, time_range='medium_term')  # Fetch top tracks
-    top_tracks = results['items']
-    track_names = [track['name'] for track in top_tracks]
-    
-    return jsonify(track_names)  # Return the top tracks as JSON
+
+    # Request top 50 tracks
+    results = sp.current_user_top_tracks(limit=20, time_range='medium_term')  
+
+    # Extract the track names and artists
+    all_top_tracks = [
+        {
+            'track_name': track['name'],
+            'artists': [artist['name'] for artist in track['artists']]
+        }
+        for track in results['items']
+    ]
+
+    user_id = sp.current_user()['id']
+
+    # Path to the JSON file
+    json_file_path = f'user_data_{user_id}.json'
+
+    # Clear and rewrite the JSON file with the new data for this user
+    with open(json_file_path, 'w') as json_file:
+        json.dump(all_top_tracks, json_file, indent=4)
+
+    return 'Data saved to file successfully!'
+
+
 
 if __name__ == '__main__':
     app.secret_key = os.urandom(24)  # Secret key for sessions
