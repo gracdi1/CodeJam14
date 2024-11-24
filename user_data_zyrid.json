@@ -46,6 +46,12 @@
         ]
     },
     {
+        "track_name": "Work Song",
+        "artists": [
+            "Hozier"
+        ]
+    },
+    {
         "track_name": "Come Back to Earth",
         "artists": [
             "Mac Miller"
@@ -59,12 +65,6 @@
         ]
     },
     {
-        "track_name": "Saving Up",
-        "artists": [
-            "Dom Dolla"
-        ]
-    },
-    {
         "track_name": "She\u2019s Gone, Dance On",
         "artists": [
             "Disclosure"
@@ -75,6 +75,12 @@
         "artists": [
             "Joey Valence & Brae",
             "Z-Trip"
+        ]
+    },
+    {
+        "track_name": "Saving Up",
+        "artists": [
+            "Dom Dolla"
         ]
     },
     {
@@ -108,12 +114,6 @@
         "track_name": "What's the Use?",
         "artists": [
             "Mac Miller"
-        ]
-    },
-    {
-        "track_name": "Work Song",
-        "artists": [
-            "Hozier"
         ]
     },
     {

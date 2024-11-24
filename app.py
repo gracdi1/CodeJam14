@@ -106,7 +106,7 @@ def analyze_personality():
 
     # Define the constant prompt
     constant_prompt = (
-        'You are a virtual personality predictor. Your job is to write to the user a short paragraph '
+        'You are a virtual personality predictor. Your job is to write to the user a short paragraph. Include an explicit reference to 1-2 of the most popular artists. '
         'describing their personality based on their top artists and genres in the same grammar and language level as this prompt. '
         'First, you should consider the top artists and genres, and what the overarching themes are. Based on this, select a funny spirit '
         'animal that reflects the user\'s personality. Feel free to make bold claims that are funny. Predict age range, love life, hobbies, '
@@ -139,86 +139,89 @@ def analyze_personality():
     # Add CSS styles to the return message
     # Add CSS styles to the return message
     formatted_response = f"""
-    <html>
-        <head>
-            <style>
-                body {{
-                    background: linear-gradient(to bottom, #A5DEB9, #F5F5F5); /* Light green gradient */
-                    font-family: 'Roboto Mono', monospace;
-                    min-height: 100vh;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: flex-start;
-                    padding-top: 20px;
-                    color: #234f23;
-                    text-align: center;
-                }}
-                h1 {{
-                    font-size: 100px;
-                    margin-bottom: 10px;
-                    font-weight: bold;
-                }}
-                p {{
-                    font-size: 18px;
-                    color: #555;
-                    margin: 10px 0;
-                }}
-                .container {{
-                    position: relative;
-                    margin-top: 40px;
-                    width: 600px;
-                    background-color: #ffffff;
-                    border-radius: 20px;
-                    padding: 20px;
-                    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
-                }}
-                .message-box {{
-                    background-color: #137C38;
-                    color: #fff;
-                    padding: 20px;
-                    border-radius: 20px;
-                    font-size: 20px;
-                    white-space: pre-line;
-                    text-align: center;
-                }}
-                .recommendation {{
-                    font-weight: bold;
-                    color: #4CAF50;
-                    margin-top: 20px;
-                }}
-                .logout-button {{
-                    margin-top: 35px;
-                    padding: 10px 20px;
-                    background-color: #fff;
-                    color: #234f23;
-                    border: 2px solid #234f23;
-                    border-radius: 10px;
-                    font-size: 16px;
-                    cursor: pointer;
-                    font-family: 'Roboto Mono', monospace;
-                    transition: transform 0.1s ease, box-shadow 0.1s ease;
-                }}
-                .logout-button:hover {{
-                    transform: scale(0.95);
-                    box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.2);
-                }}
-            </style>
-        </head>
-        <body>
-            <h1>personify</h1>
-            <p>What does your music say about you?</p>
-            <div class="container">
-                <div class="message-box">
-                    {assistant_message if assistant_message else "Loading your analysis..."}
-                </div>
-                <p class="recommendation">Recommended Artist/Genre: Check out something new that matches your vibe!</p>
-                <!-- Add the logout button with a link to the Spotify logout page -->
-                <a href="http://localhost:3000/logout" class="logout-button">Logout</a>
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Rubik+Bubbles&family=Roboto+Mono&display=swap" rel="stylesheet">
+        <style>
+            body {{
+                background: linear-gradient(to bottom, #A5DEB9, #F5F5F5); /* Light green gradient */
+                font-family: 'Rubik Bubbles', cursive; /* Apply Rubik Bubbles globally */
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                padding-top: 20px;
+                color: #234f23;
+                text-align: center;
+            }}
+            h1 {{
+                font-size: 100px;
+                margin-bottom: 10px;
+                font-weight: bold;
+            }}
+            p {{
+                font-size: 18px;
+                color: #555;
+                margin: 10px 0;
+            }}
+            .container {{
+                position: relative;
+                margin-top: 40px;
+                width: 600px;
+                background-color: #ffffff;
+                border-radius: 20px;
+                padding: 20px;
+                box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+            }}
+            .message-box {{
+                background: linear-gradient(to bottom, #137C38, #149C40); /* Subtle gradient */
+                color: #fff;
+                padding: 20px;
+                border-radius: 10px 10px 15px 15px; /* Reduced top border radius */
+                font-size: 20px;
+                white-space: pre-line;
+                text-align: center;
+                font-family: 'Roboto Mono', monospace; /* Override to use typewriter-style font */
+                margin-bottom: 20px; /* Adds space below the green text section */
+            }}
+            .recommendation {{
+                font-weight: bold;
+                color: #4CAF50;
+                margin-top: 20px;
+            }}
+            .logout-button {{
+                padding: 10px 20px;
+                background-color: #fff;
+                color: #234f23;
+                border: 2px solid #234f23;
+                border-radius: 10px;
+                font-size: 16px;
+                cursor: pointer;
+                transition: transform 0.1s ease, box-shadow 0.1s ease;
+            }}
+            .logout-button:hover {{
+                transform: scale(0.95);
+                box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.2);
+            }}
+        </style>
+    </head>
+    <body>
+        <h1>personify</h1>
+        <p>What does your music say about you?</p>
+        <div class="container">
+            <div class="message-box">
+                {assistant_message if assistant_message else "Loading your analysis..."}
             </div>
-        </body>
-    </html> 
-    """
+            <!-- Add the logout button with a link to the Spotify logout page -->
+            <a href="http://localhost:3000/logout" class="logout-button">Logout</a>
+        </div>
+    </body>
+</html>
+"""
+
+
+
     return formatted_response
 
 
