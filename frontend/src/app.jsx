@@ -9,6 +9,7 @@ function App() {
     <Router>
       <Routes>
         {/* Default route - Login Page */}
+        
         <Route path="/" element={<LoginPage />} />
 
         {/* Dashboard Route */}
