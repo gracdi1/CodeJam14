@@ -3,82 +3,111 @@ import '../styles/index.css'; // Import the CSS file
 
 function DashboardPage() {
   const [inputValue, setInputValue] = useState(""); // Starts empty
+  const [isLoading, setIsLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
 
-  // Placeholder text
   const placeholderText = "Data will appear here...";
 
   useEffect(() => {
-    // Simulate fetching dynamic text (you'll replace this logic with your file logic)
-    setInputValue("based on our complex\nanalysis your music\ntaste is bad");
-  }, []);
+    const fetchPersonalityData = async () => {
+      try {
+        setIsLoading(true); // Set loading state
+        console.log("Fetching personality data...");
+        
+        const response = await fetch('http://localhost:3000/analyze-personality', {
+          method: 'GET',
+        });
+
+        console.log("Response status:", response.status); // Debugging log
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        setInputValue(data.message || "No personality data found."); // Set the personality message
+        console.log("Fetched data:", data); // Debugging log
+      } catch (err) {
+        console.error("Fetch error:", err); // Log detailed error to console
+        setError(err.message || "An unknown error occurred.");
+      } finally {
+        setIsLoading(false); // Remove loading state
+      }
+    };
+
+    // Fetch data every 5 seconds
+    const intervalId = setInterval(fetchPersonalityData, 5000);
+
+    // Clean up the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, []); // Empty dependency array means this effect runs once on mount
 
   const pageStyles = {
     background: 'linear-gradient(to bottom, #A5DEB9, #F5F5F5)', // Light green gradient
-    minHeight: '100vh', // Full screen height
-    display: 'flex', // Flexbox for centering
-    flexDirection: 'column', // Stack items vertically
-    alignItems: 'center', // Center horizontally
-    justifyContent: 'flex-start', // Keep content closer to the top
-    paddingTop: '0.01vh', // Bring everything closer to the top
-    color: '#234f23', // Green text to match the theme
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingTop: '0.01vh',
+    color: '#234f23',
   };
 
   const headingStyles = {
-    fontSize: '100px', // Larger font size for the title
-    marginBottom: '2px', // Minimize space below the title
+    fontSize: '100px',
+    marginBottom: '2px',
   };
 
   const paragraphStyles = {
     fontSize: '18px',
-    marginTop: '0px', // Remove space between title and description
-    marginBottom: '20px', // Keep space between the description and input box
+    marginTop: '0px',
+    marginBottom: '20px',
   };
 
   const boxWrapperStyles = {
-    position: 'relative', // To stack the main box and the shadow
-    marginTop: '40px', // Space above the box
+    position: 'relative',
+    marginTop: '40px',
   };
 
   const shadowBoxStyles = {
-    position: 'absolute', // Positioned relative to the wrapper
-    top: '10px', // Shifted slightly down
-    left: '10px', // Shifted slightly to the right
-    width: '100%', // Match the main box's width
-    minHeight: '165px', // Match the main box's height
-    backgroundColor: '#97D0AB', // Slightly paler green
-    borderRadius: '20px', // Rounded corners
-    zIndex: '1', // Behind the main box
+    position: 'absolute',
+    top: '10px',
+    left: '10px',
+    width: '100%',
+    minHeight: '165px',
+    backgroundColor: '#97D0AB',
+    borderRadius: '20px',
+    zIndex: '1',
   };
 
   const inputBoxStyles = {
-    position: 'relative', // Relative to the shadow
-    width: '600px', // Match the width of the shadow box
-    minHeight: '120px', // Match the height
-    backgroundColor: '#137C38', // Dark green background
-    color: '#fff', // White text
-    padding: '20px', // Padding inside the box
-    borderRadius: '20px', // Rounded corners
-    fontFamily: "'Roboto Mono', monospace", // Font style for the text
-    fontSize: '20px', // Font size
-    textAlign: 'center', // Center-align the text
-    whiteSpace: 'pre-line', // Preserve line breaks in the dynamic text
-    zIndex: '2', // Above the shadow
+    position: 'relative',
+    width: '600px',
+    minHeight: '120px',
+    backgroundColor: '#137C38',
+    color: '#fff',
+    padding: '20px',
+    borderRadius: '20px',
+    fontFamily: "'Roboto Mono', monospace",
+    fontSize: '20px',
+    textAlign: 'center',
+    whiteSpace: 'pre-line',
+    zIndex: '2',
   };
 
   const logoutButtonStyles = {
-    marginTop: '35px', // Space above the button
-    padding: '10px 20px', // Button padding
-    backgroundColor: '#fff', // White background
-    color: '#234f23', // Green text
-    border: '2px solid #234f23', // Green border
-    borderRadius: '10px', // Rounded corners
-    fontSize: '16px', // Font size
-    fontFamily: "'Roboto Mono', monospace", // Match the font style
-    cursor: 'pointer', // Pointer cursor on hover
-    position: 'relative', // Positioned below the box
-    transition: 'transform 0.1s ease, box-shadow 0.1s ease', // Smooth animation for hover effect
+    marginTop: '35px',
+    padding: '10px 20px',
+    backgroundColor: '#fff',
+    color: '#234f23',
+    border: '2px solid #234f23',
+    borderRadius: '10px',
+    fontSize: '16px',
+    fontFamily: "'Roboto Mono', monospace",
+    cursor: 'pointer',
+    position: 'relative',
+    transition: 'transform 0.1s ease, box-shadow 0.1s ease',
   };
-  
 
   const handleLogout = () => {
     console.log("Logging out...");
@@ -87,35 +116,34 @@ function DashboardPage() {
 
   const [isHovered, setIsHovered] = useState(false);
 
-return (
-  <div style={pageStyles}>
-    <h1 className="title-bubble" style={headingStyles}>personify</h1>
-    <p style={paragraphStyles}>What does your music say about you?</p>
-    {/* Box wrapper with shadow */}
-    <div style={boxWrapperStyles}>
-      <div style={shadowBoxStyles}></div> {/* Background shadow */}
-      <div style={inputBoxStyles}>
-        {inputValue || placeholderText} {/* Show placeholder if no dynamic text */}
+  return (
+    <div style={pageStyles}>
+      <h1 className="title-bubble" style={headingStyles}>personify</h1>
+      <p style={paragraphStyles}>What does your music say about you?</p>
+      {/* Box wrapper with shadow */}
+      <div style={boxWrapperStyles}>
+        <div style={shadowBoxStyles}></div> {/* Background shadow */}
+        <div style={inputBoxStyles}>
+          {isLoading ? "Loading your analysis..." : error ? error : inputValue || placeholderText}
+        </div>
       </div>
+      {/* Logout button */}
+      <button
+        style={{
+          ...logoutButtonStyles,
+          transform: isHovered ? 'scale(0.95)' : 'scale(1)',
+          boxShadow: isHovered
+            ? 'inset 0px 4px 6px rgba(0, 0, 0, 0.2)'
+            : '0px 4px 6px rgba(0, 0, 0, 0.1)',
+        }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onClick={handleLogout}
+      >
+        Logout
+      </button>
     </div>
-    {/* Logout button */}
-    <button
-      style={{
-        ...logoutButtonStyles,
-        transform: isHovered ? 'scale(0.95)' : 'scale(1)',
-        boxShadow: isHovered
-          ? 'inset 0px 4px 6px rgba(0, 0, 0, 0.2)'
-          : '0px 4px 6px rgba(0, 0, 0, 0.1)',
-      }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onClick={handleLogout}
-    >
-      Logout
-    </button>
-  </div>
-);
-
+  );
 }
 
 export default DashboardPage;
